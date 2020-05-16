@@ -4,7 +4,7 @@ import time
 
 class CameraDataCreator:
 
-    def __init__(self , dst , time_diff = 0.5):
+    def __init__(self , dst , total_save ,time_diff = 0.5):
 
         if os.path.isdir(dst) == False:
             os.makedirs(dst)
@@ -12,6 +12,7 @@ class CameraDataCreator:
         self.last_recoded_time = None
         self.dst = dst
         self.time_diff = time_diff
+        self.total_save = total_save
 
     def run(self , size):
 
@@ -32,8 +33,13 @@ class CameraDataCreator:
 
             if self._should_save():
                 self._save(index , current_frame)
-                print("Data saved")
+                print("{} data saved".format(index))
                 index += 1
+
+                if index == self.total_save:
+                    print("Total {} image saved.".format(self.total_save))
+                    video_running = False
+
 
             cv2.imshow("Image" , current_frame)
             if cv2.waitKey(1) & 0xFF == ord("q"):
@@ -72,7 +78,7 @@ class CameraDataCreator:
 
 def main():
 
-    camera = CameraDataCreator("./test")
+    camera = CameraDataCreator("./test" , total_save = 5)
     camera.run(size = (224 , 224))
 
 
