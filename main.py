@@ -2,6 +2,8 @@ import cv2
 import os
 import time
 
+import argparse
+
 class CameraDataCreator:
 
     def __init__(self , dst , total_save ,time_diff = 0.5):
@@ -84,8 +86,15 @@ class CameraDataCreator:
 
 def main():
 
-    camera = CameraDataCreator("./test" , total_save = 5)
-    camera.run(size = (224 , 224))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d" , "--dst" , default = "Test", help = "Dst for image to save")
+    parser.add_argument("-ts" , "--total_save" , type = int , default = 50 , help = "number of image to save")
+    parser.add_argument("-s" , "--size" , type = int , default = 224 , help = "Image save size")
+    parser.add_argument("-td" , "--time_diff" , type = float , default = 1.5, help = "Frame diff between save")
+    args = parser.parse_args()
+
+    camera = CameraDataCreator(args.dst  , total_save = args.total_save)
+    camera.run(size = (args.size , args.size))
 
 
 if __name__ == "__main__":
