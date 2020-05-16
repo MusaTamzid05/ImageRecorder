@@ -33,8 +33,8 @@ class CameraDataCreator:
 
             if self._should_save():
                 self._save(index , current_frame)
-                print("{} data saved".format(index))
                 index += 1
+                print("{} data saved".format(index))
 
                 if index == self.total_save:
                     print("Total {} image saved.".format(self.total_save))
@@ -43,9 +43,15 @@ class CameraDataCreator:
 
             cv2.imshow("Image" , current_frame)
             if cv2.waitKey(1) & 0xFF == ord("q"):
-                cap.release()
-                cv2.destroyAllWindows()
                 video_running = False
+
+
+        self._close(cap)
+
+    def _close(self , cap):
+        cap.release()
+        cv2.destroyAllWindows()
+
 
     def _save(self , frame_index ,  image):
 
