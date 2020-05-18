@@ -18,17 +18,16 @@ class CameraDataCreator:
 
     def run(self , video_src ,  size):
 
-        show_window = True
+        frame_delay = 1
 
         try:
             video_src = int(video_src)
         except ValueError:
-            # we dont show window for video.
-            show_window = False
+            frame_delay = 45
 
 
 
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(video_src)
         video_running = True
 
         index = 0
@@ -38,6 +37,7 @@ class CameraDataCreator:
             ret , current_frame = cap.read()
 
             if ret == False:
+                print("Video stoped")
                 video_running = False
                 continue
 
@@ -52,11 +52,10 @@ class CameraDataCreator:
                     print("Total {} image saved.".format(self.total_save))
                     video_running = False
 
-            if show_window:
-                cv2.imshow("Image" , current_frame)
+            cv2.imshow("Image" , current_frame)
 
 
-            if cv2.waitKey(1) & 0xFF == ord("q"):
+            if cv2.waitKey(frame_delay) & 0xFF == ord("q"):
                 video_running = False
 
 
@@ -106,7 +105,7 @@ def main():
     parser.add_argument("-d" , "--dst" , default = "Test", help = "Dst for image to save")
     parser.add_argument("-ts" , "--total_save" , type = int , default = 50 , help = "number of image to save")
     parser.add_argument("-s" , "--size" , type = int , default = 224 , help = "Image save size")
-    parser.add_argument("-td" , "--time_diff" , type = float , default = 1.5, help = "Frame diff between save")
+    parser.add_argument("-td" , "--time_diff" , type = float , default = 1, help = "Frame diff between save")
     args = parser.parse_args()
 
     camera = CameraDataCreator(args.dst  , total_save = args.total_save)
