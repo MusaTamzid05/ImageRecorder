@@ -19,11 +19,13 @@ class CameraDataCreator:
     def run(self , video_src ,  size):
 
         frame_delay = 1
+        self.is_video_file = False
 
         try:
             video_src = int(video_src)
         except ValueError:
             frame_delay = 45
+            self.is_video_file = True
 
 
 
@@ -66,6 +68,15 @@ class CameraDataCreator:
         cv2.destroyAllWindows()
 
     def _is_finished(self , frame_index):
+
+        '''
+        If its a video file, we want to finish the whole video
+        '''
+
+        if self.is_video_file:
+            return False
+
+
         return frame_index == self.total_save
 
 
